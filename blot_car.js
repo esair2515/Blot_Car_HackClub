@@ -1,14 +1,13 @@
-// My Car Code
+/*
+@title: My Car
+*/
 
+// Dimensions of Frame
 const width = 200;
 const height = 100;
-
 setDocDimensions(width, height);
 
-// store final lines here
-const finalLines = [];
-
-// the circles
+// Cirlce
 function createCircle(centerX, centerY, radius, numSegments = 20) {
   const circle = [];
   const angleStep = (2 * Math.PI) / numSegments;
@@ -22,29 +21,51 @@ function createCircle(centerX, centerY, radius, numSegments = 20) {
   return circle;
 }
 
-// the body of the car
+// The Polygon
+function fillPolygon(points, color) {
+  const shape = [points];
+  drawLines(shape, { fill: color });
+}
+
+// Circle
+function fillCircle(centerX, centerY, radius, color) {
+  const circlePoints = createCircle(centerX, centerY, radius);
+  fillPolygon(circlePoints, color);
+}
+
+// Window "Stretching it :)"
+function createStretchedWindow() {
+  return [
+    [30, 38], [70, 38], [60, 31], [40, 31] // Stretched window
+  ].map(([x, y]) => [x, height - y]);
+}
+
+// Body
 const carBody = [
-  [10, 40], [30, 20], [70, 20], [90, 40], // top
-  [150, 40], [160, 50], [10, 50], // bottom
-  [10, 40]
-].map(([x, y]) => [x, height - y]); 
+  [20, 40], [30, 30], [70, 30], [80, 40], // top
+  [120, 40], [130, 50], [20, 50], // bottom
+  [20, 40]
+].map(([x, y]) => [x, height - y]);
 
-// front window
-const frontWindow = [
-  [30, 20], [40, 30], [50, 30], [60, 20]
-].map(([x, y]) => [x, height - y]);  
+// Window again
+const frontWindow = createStretchedWindow();
 
-// back window
-const backWindow = [
-  [70, 20], [80, 30], [90, 30], [90, 40]
-].map(([x, y]) => [x, height - y]); 
+// Draw the car!
+function drawCar() {
+  // Draw car body
+  fillPolygon(carBody, 'brown');
+  
+  // Draw front window
+  fillPolygon(frontWindow, 'lightblue');
+  
+  // Draw wheels
+  fillCircle(40, 50, 12, 'black'); // Front wheel
+  fillCircle(108, 50, 12, 'black'); // Rear wheel
+  
+  // Draw yellow lights
+  fillCircle(122, 45, 1.5, 'yellow'); // Moved back top light
+  fillCircle(124, 48, 1.5, 'yellow'); // Bottom light
+}
 
-// wheels
-const frontWheel = createCircle(40, 50, 10);
-const backWheel = createCircle(120, 50, 10); 
-
-// put together
-finalLines.push(carBody, frontWindow, backWindow, frontWheel, backWheel);
-
-// run
-drawLines(finalLines);
+// Run the drawing function
+drawCar();
